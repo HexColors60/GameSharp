@@ -38,7 +38,7 @@ namespace GameSharp.Core.Impl
                 CreatedBy = player
             };
             await _db.GameRooms.AddAsync(room, token);
-            await _roomPlayerServices.AddPlayersAsync(room, false, player, token);
+            await _roomPlayerServices.AddPlayersAsync(room, true, player, token);
 
             await _db.SaveChangesAsync(token);
             await OnRoomCreatedEvent.Invoke(this, room, token);
