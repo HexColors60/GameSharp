@@ -31,7 +31,7 @@ namespace GameSharp.Tests.Tests
         private readonly IGameRoomPlayerServices _gameRoomPlayerServices;
 
         [Fact]
-        public async Task When_player_2_join_as_viewer_then_two_player_should_exists_and_player_2_should_be_viewer()
+        public async Task When_a_player_join_as_viewer_then_two_player_should_exists_and_player_2_should_be_viewer()
         {
             //Background
             var room = await _backgroundHelper.CreateRoomAsync();
@@ -39,7 +39,7 @@ namespace GameSharp.Tests.Tests
 
             //When
             var gameRoomPlayer = await _gameRoomPlayerServices
-                .AddAndSavePlayersAsync(room.Id, true, CancellationToken.None);
+                .AddAndSavePlayersAsync(room.Id, false, CancellationToken.None);
 
             //Then
             gameRoomPlayer.GameRoom.RoomPlayers.Single(p =>
