@@ -49,7 +49,7 @@ namespace GameSharp.Tests.Tests
         }
 
         [Fact]
-        public async Task When_player_2_join_then_two_player_should_exists()
+        public async Task When_a_second_player_joins_then_two_player_should_exists()
         {
             //Background
             var room = await _backgroundHelper.CreateRoomAsync();
