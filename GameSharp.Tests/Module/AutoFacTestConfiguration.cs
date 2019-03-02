@@ -75,7 +75,6 @@ namespace GameSharp.Tests.Module
             builder.RegisterType<BackgroundHelper>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<FakeSecondPlayerFirst>().AsImplementedInterfaces();
             builder.RegisterType<FakeGameDataServices>().AsImplementedInterfaces();
 
             Container = builder.Build();

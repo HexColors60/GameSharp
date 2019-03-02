@@ -21,13 +21,13 @@ namespace GameSharp.Tests.Fakes
 
         public async Task<Player> Authenticate(Func<IQueryable<Player>, Task<Player>> action)
         {
-            var player = (await action?.Invoke(_db.Players));
-            var exists = await _db.Players
-                .SingleOrDefaultAsync(p => p.Id == player.Id);
+            var player = (await action.Invoke(Db.Players));
+            var exists = await Db.Players
+                .FirstOrDefaultAsync(p => p.Id == player.Id);
             return _currentPlayer = exists ?? player;
         }
 
-        public IEnumerable<Player> Players => _db.Players;
+        public IEnumerable<Player> Players => Db.Players;
 
         public override async Task<Player> GetCurrentPlayerAsync() =>
             await Task.FromResult(_currentPlayer);

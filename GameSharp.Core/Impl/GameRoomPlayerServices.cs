@@ -15,7 +15,7 @@ namespace GameSharp.Core.Impl
     {
         private readonly GameSharpDbContext _db;
         private readonly IPlayerProvider _playerProvider;
-        public event AsyncEventHandler<GameRoomPlayer> OnPlayerJoinedEvent = delegate
+        public event AsyncEventHandler<GameRoomPlayer> OnPlayerJoinEvent = delegate
         {
             return Task.CompletedTask;
         };
@@ -27,11 +27,16 @@ namespace GameSharp.Core.Impl
             _playerProvider = playerProvider;
         }
 
-        public async Task<GameRoomPlayer> AddPlayersAsync(GameRoom room,
-            bool isPlayer,
-            Player player,
-            CancellationToken token = default(CancellationToken))
+        public async Task<GameRoomPlayer> JoinAsync(int roomId, bool isPlayer, CancellationToken token = default(CancellationToken))
         {
+            var player = await _playerProvider.Challenge();
+
+            var room = await _db.GameRooms.Include(p => p.RoomPlayers)
+                .FirstOrDefaultAsync(p => p.Id == roomId, token);
+
+            if (room == null)
+                throw new EntityNotFoundException("The room does not exists");
+
             if (isPlayer && !room.IsAcceptingPlayers)
                 throw new GameNotAcceptingMorePlayersException("The game is not accepting more players at the moment");
 
@@ -43,24 +48,8 @@ namespace GameSharp.Core.Impl
             };
 
             await _db.GameRoomPlayers.AddAsync(entity, token);
-            return entity;
-        }
-
-        public async Task<GameRoomPlayer> AddAndSavePlayersAsync(int roomId, bool isPlayer, CancellationToken token = default(CancellationToken))
-        {
-            var player = await _playerProvider.GetCurrentPlayerAsync();
-            if (player == null)
-                throw new UnauthorizedAccessException();
-
-            var room = await _db.GameRooms.Include(p => p.RoomPlayers)
-                .SingleOrDefaultAsync(p => p.Id == roomId, token);
-
-            if (room == null)
-                throw new EntityNotFoundException("The room does not exists");
-
-            var entity = await AddPlayersAsync(room, isPlayer, player, token);
             await _db.SaveChangesAsync(token);
-            await OnPlayerJoinedEvent.Invoke(this, entity, token);
+            await OnPlayerJoinEvent.Invoke(this, entity, token);
             return entity;
         }
     }

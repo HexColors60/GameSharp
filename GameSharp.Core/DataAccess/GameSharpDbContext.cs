@@ -81,17 +81,9 @@ namespace GameSharp.Core.DataAccess
                 .ValueGeneratedOnAdd();
             modelBuilder
                 .Entity<GameData>()
-                .HasOne(p => p.FirstPlayer)
-                .WithMany(r => r.FirstPlayers)
-                .IsRequired();
-            modelBuilder
-                .Entity<GameData>()
-                .HasOne(p => p.CurrentTurn)
+                .HasOne(p => p.CurrentEntity)
                 .WithMany(r => r.CurrentTurns)
-                .IsRequired(false);
-            modelBuilder
-                .Entity<GameData>()
-                .Ignore(p => p.Turns);
+                .IsRequired(false); // TODO: should this be required or not?
 
             modelBuilder
                 .Entity<PlayerData>()

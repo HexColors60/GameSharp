@@ -39,7 +39,7 @@ namespace GameSharp.Tests.Tests
 
             //When
             var gameRoomPlayer = await _gameRoomPlayerServices
-                .AddAndSavePlayersAsync(room.Id, false, CancellationToken.None);
+                .JoinAsync(room.Id, false, CancellationToken.None);
 
             //Then
             gameRoomPlayer.GameRoom.RoomPlayers.Single(p =>

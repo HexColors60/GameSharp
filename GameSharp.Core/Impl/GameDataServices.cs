@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Dutil.Core.Abstract;
 using Dutil.Core.Events;
 using Dutil.Core.Exceptions;
 using GameSharp.Core.Abstract;
@@ -18,63 +17,45 @@ namespace GameSharp.Core.Impl
         IGameDataServices<TGame>
         where TGame : GameData, new()
     {
-        protected readonly IPlayerProvider _playerProvider;
-        protected readonly GameSharpDbContext _db;
-        protected readonly IGameConfigurationProvider _configurationProvider;
-        protected readonly IStateMachineProvider<GameState, GameTransitions> _stateMachineProvider;
-        protected readonly IPlayerTurnsService _playerTurnService;
+        private readonly IPlayerProvider _playerProvider;
+        protected readonly GameSharpDbContext Db;
+        private readonly IGameConfigurationProvider _configurationProvider;
+        private readonly IGameDataFactory<TGame> _factory;
         public abstract event AsyncEventHandler<TGame> OnGameStartEvent;
 
-        public GameDataServices(IPlayerProvider playerProvider,
+        protected GameDataServices(IPlayerProvider playerProvider,
             GameSharpDbContext db,
             IGameConfigurationProvider configurationProvider,
-            IStateMachineProvider<GameState, GameTransitions> stateMachineProvider,
-            IPlayerTurnsService playerTurnService)
+            IGameDataFactory<TGame> factory)
         {
             _playerProvider = playerProvider;
-            _db = db;
+            Db = db;
             _configurationProvider = configurationProvider;
-            _stateMachineProvider = stateMachineProvider;
-            _playerTurnService = playerTurnService;
+            _factory = factory;
         }
-
+        
         public virtual async Task<TGame> StartGameAsync(int roomId,
             bool acceptMorePlayer = false,
             CancellationToken token = default(CancellationToken))
         {
-            var roomEntity = await Validate();
+            var player = await _playerProvider.Challenge();
+            var roomEntity = await ValidateEntity();
 
             roomEntity.IsAcceptingPlayers = acceptMorePlayer;
+            return _factory.Create(roomEntity);
 
-            var game = new TGame
+            async Task<GameRoom> ValidateEntity()
             {
-                Room = roomEntity
-            };
-            _stateMachineProvider.ChangeState(game, GameTransitions.START_GAME);
-            await _playerTurnService.ChoosePlayers(game, token);
-
-            if (game.CurrentState != GameState.PLAYING)
-                throw new InvalidGameStateException();
-
-            game.NextTurn();
-            return game;
-
-            async Task<GameRoom> Validate()
-            {
-                var player = await _playerProvider.GetCurrentPlayerAsync();
-                if (player == null)
-                    throw new UnauthorizedAccessException();
-
-                var room = await _db.GameRooms
+                var room = await Db.GameRooms
                     .Include(p => p.RoomPlayers)
                     .ThenInclude(rp => rp.Player)
                     .Include(r => r.GameData)
-                    .SingleOrDefaultAsync(p => p.Id == roomId, token);
+                    .FirstOrDefaultAsync(p => p.Id == roomId, token);
 
                 if (room == null)
                     throw new EntityNotFoundException("The room do not exists");
 
-                if (room.GameData != null)
+                if (room.GameData?.CurrentState > GameState.NONE)
                     throw new GameAlreadyStartedException();
 
                 if (room.RoomPlayers.All(r => r.Player.Id != player.Id))

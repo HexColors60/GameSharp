@@ -35,7 +35,7 @@ namespace GameSharp.Tests.Helpers
             CancellationToken token = default)
         {
             await _playerSeedHelper.SeedAndLoginAsync(username, token);
-            return await _roomPlayerService.AddAndSavePlayersAsync(room.Id, true, token);
+            return await _roomPlayerService.JoinAsync(room.Id, true, token);
         }
 
         public async Task<GameData> StartGameAsync(GameRoom room, CancellationToken token = default)

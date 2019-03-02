@@ -13,6 +13,7 @@ namespace GameSharp.Core.Entities
         public Guid GameIdentifier { get; set; }
         public GameData GameData { get; set; }
         public Player CreatedBy { get; set; }
+        public DateTime CreatedOn { get; set; }
         public int? GameDataId { get; set; }
     }
 }

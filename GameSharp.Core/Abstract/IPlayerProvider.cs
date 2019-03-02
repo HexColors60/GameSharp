@@ -8,5 +8,6 @@ namespace GameSharp.Core.Abstract
     {
         Task<Player> GetCurrentPlayerAsync();
         Task<Player> AddAsync(CancellationToken token = default(CancellationToken));
+        Task<Player> Challenge();
     }
 }

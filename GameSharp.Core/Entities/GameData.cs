@@ -1,33 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
 using Dutil.Core.Abstract;
 using GameSharp.Core.Entities.Enums;
 
 namespace GameSharp.Core.Entities
 {
     [Serializable]
-    public class GameData : EventArgs, IEntity, ITransitable<GameState>
+    public class GameData : WriteLinkedListEntity<PlayerData>,
+        IEntity,
+        IEnumeratorEntity<PlayerData>,
+        ITransitable<GameState>
     {
-        public PlayerData FirstPlayer { get; set; }
-        public PlayerData CurrentTurn { get; private set; }
         public int Id { get; set; }
-        public GameState CurrentState { get; set; }
         public GameRoom Room { get; set; }
+        public GameState CurrentState { get; set; }
+        public PlayerData CurrentEntity { get; private set; }
 
-        public IEnumerable<PlayerData> Turns
+        public bool Next()
         {
-            get
-            {
-                var turn = FirstPlayer;
-                while (turn != null)
-                {
-                    yield return turn;
-                    turn = turn.Next;
-                }
-            }
+            if (LinkedList.Count <= 0)
+                return false;
+            CurrentEntity = CurrentEntity == null ? LinkedList.First.Value : CurrentEntity.Next;
+            return CurrentEntity != null;
         }
-
-        public PlayerData NextTurn() =>
-            CurrentTurn = CurrentTurn == null || CurrentTurn.Next == null ? FirstPlayer : CurrentTurn.Next;
     }
 }

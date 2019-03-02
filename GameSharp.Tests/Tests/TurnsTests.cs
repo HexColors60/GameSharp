@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using GameSharp.Tests.Abstract;
 using GameSharp.Tests.Helpers;
@@ -45,7 +46,7 @@ namespace GameSharp.Tests.Tests
             var game = await _backgroundHelper.StartGameAsync(room);
 
             //Then
-            game.CurrentTurn
+            game.CurrentEntity
                 .Player
                 .Username
                 .ShouldBe(PlayerServiceSeedHelper.SecondPlayerUsername);
