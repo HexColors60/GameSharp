@@ -1,16 +1,20 @@
-﻿using System.Collections.Generic;
-using Dawlin.Abstract.Entities;
-using Dawlin.Util.Abstract;
-using GameSharp.Entities.Enums;
+﻿using System;
+using System.Collections.Generic;
+using Dutil.Core.Abstract;
+using GameSharp.Core.Entities.Enums;
 
-namespace GameSharp.Entities
+namespace GameSharp.Core.Entities
 {
-    public abstract class GameData : IEntity, ITransitable<GameState>
+    [Serializable]
+    public class GameData : EventArgs, IEntity, ITransitable<GameState>
     {
-        public PlayerTurn FirstPlayer { get; set; }
-        public PlayerTurn CurrentTurn { get; private set; }
+        public PlayerData FirstPlayer { get; set; }
+        public PlayerData CurrentTurn { get; private set; }
+        public int Id { get; set; }
+        public GameState CurrentState { get; set; }
+        public GameRoom Room { get; set; }
 
-        public IEnumerable<PlayerTurn> Turns
+        public IEnumerable<PlayerData> Turns
         {
             get
             {
@@ -23,10 +27,7 @@ namespace GameSharp.Entities
             }
         }
 
-        public int Id { get; set; }
-        public GameState CurrentState { get; set; }
-
-        public PlayerTurn NextTurn() =>
+        public PlayerData NextTurn() =>
             CurrentTurn = CurrentTurn == null || CurrentTurn.Next == null ? FirstPlayer : CurrentTurn.Next;
     }
 }

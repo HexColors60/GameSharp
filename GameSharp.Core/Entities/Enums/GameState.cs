@@ -1,5 +1,8 @@
-﻿namespace GameSharp.Entities.Enums
+﻿using System;
+
+namespace GameSharp.Core.Entities.Enums
 {
+    [Serializable]
     public enum GameState : byte
     {
         NONE,

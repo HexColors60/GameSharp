@@ -1,22 +1,22 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using GameSharp.DataAccess;
-using GameSharp.Entities;
+using GameSharp.Core.DataAccess;
+using GameSharp.Core.Entities;
 
-namespace GameSharp.Services.Abstract
+namespace GameSharp.Core.Abstract
 {
     public abstract class PlayerProviderBase : IPlayerProvider
     {
-        protected readonly GameSharpContext _db;
+        protected readonly GameSharpDbContext _db;
 
-        protected PlayerProviderBase(GameSharpContext db)
+        protected PlayerProviderBase(GameSharpDbContext db)
         {
             _db = db;
         }
 
         public async Task<Player> AddAsync(CancellationToken token = default(CancellationToken))
         {
-            var player = await this.GetCurrentPlayerAsync();
+            var player = await GetCurrentPlayerAsync();
             await _db.Players.AddAsync(player, token);
             await _db.SaveChangesAsync(token);
             return player;

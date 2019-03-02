@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GameSharp.DataAccess\GameSharp.DataAccess.csproj" />
-    <ProjectReference Include="..\GameSharp.Entities\GameSharp.Entities.csproj" />
+    <PackageReference Include="Dutil" Version="0.0.1-alpha" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.2" />
   </ItemGroup>
 
 </Project>

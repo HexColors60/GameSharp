@@ -1,11 +1,13 @@
-﻿using Dawlin.Abstract.Entities;
+﻿using Dutil.Core.Abstract;
+using System;
 
-namespace GameSharp.Entities
+namespace GameSharp.Core.Entities
 {
-    public class GameRoomPlayer : IEntity
+    [Serializable]
+    public class GameRoomPlayer : EventArgs, IEntity
     {
         public Player Player { get; set; }
-        public bool IsViewer { get; set; }
+        public bool IsPlayer { get; set; }
         public GameRoom GameRoom { get; set; }
         public int Id { get; set; }
         public int PlayerId { get; set; }

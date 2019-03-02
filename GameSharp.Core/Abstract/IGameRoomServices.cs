@@ -1,9 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Dawlin.Util.Abstract;
-using GameSharp.Entities;
+using Dutil.Core.Events;
+using GameSharp.Core.Entities;
 
-namespace GameSharp.Services.Abstract
+namespace GameSharp.Core.Abstract
 {
     public interface IGameRoomServices
     {

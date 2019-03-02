@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace GameSharp.Services.Impl.Exceptions
+namespace GameSharp.Core.Impl.Exceptions
 {
     [Serializable]
     internal class GameNotAcceptingMorePlayersException : Exception

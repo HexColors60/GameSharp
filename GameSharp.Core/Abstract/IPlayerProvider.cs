@@ -1,8 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using GameSharp.Entities;
+using GameSharp.Core.Entities;
 
-namespace GameSharp.Services.Abstract
+namespace GameSharp.Core.Abstract
 {
     public interface IPlayerProvider
     {
