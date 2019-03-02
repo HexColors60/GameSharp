@@ -2,6 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <Version>0.0.1-alpha</Version>
+    <Authors>Dawlin Peña</Authors>
+    <Product>GameSharp</Product>
+    <Description>A library to manage game rooms, game turns, and other common things in Arcade games</Description>
+    <Copyright>2019 Dawlin Peña Luciano</Copyright>
+    <PackageLicenseUrl>https://github.com/dluciano/GameSharp/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/dluciano/GameSharp</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageTags>game game-dev game-session game-room player-stage game-utility</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
