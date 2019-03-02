@@ -1,9 +1,13 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using Dutil.Core.Abstract;
 using Dutil.Core.Events;
 using GameSharp.Core.Abstract;
 using GameSharp.Core.DataAccess;
 using GameSharp.Core.Entities;
+using GameSharp.Core.Entities.Enums;
 using GameSharp.Core.Impl;
 
 namespace GameSharp.Tests.Fakes
@@ -30,6 +34,11 @@ namespace GameSharp.Tests.Fakes
             await Db.SaveChangesAsync(token);
             await OnGameStartEvent.Invoke(this, game, token);
             return game;
+        }
+
+        internal sealed class FakeRandomizer : IListRandomizer
+        {
+            public IEnumerable<T> Generate<T>(IEnumerable<T> list) => list.Reverse();
         }
     }
 }

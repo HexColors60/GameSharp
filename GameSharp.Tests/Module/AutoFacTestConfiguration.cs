@@ -76,6 +76,8 @@ namespace GameSharp.Tests.Module
                 .AsImplementedInterfaces();
 
             builder.RegisterType<FakeGameDataServices>().AsImplementedInterfaces();
+            builder.RegisterType<FakeGameDataServices.FakeRandomizer>()
+                .AsImplementedInterfaces();
 
             Container = builder.Build();
         }

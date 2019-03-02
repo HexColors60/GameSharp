@@ -22,7 +22,7 @@ namespace GameSharp.Core.Impl
             _randomizer = randomizer;
         }
 
-        public TEntity Create(GameRoom room)
+        public virtual TEntity Create(GameRoom room)
         {
             var game = new TEntity
             {
@@ -47,16 +47,6 @@ namespace GameSharp.Core.Impl
                     {
                         Player = p
                     });
-        }
-    }
-    internal class DefautlGameDataFactory :
-        GameDataFactory<GameData>
-    {
-        public DefautlGameDataFactory(
-            IStateMachineProvider<GameState, GameTransitions> stateMachineProvider,
-            IListRandomizer randomizer) : base(stateMachineProvider,
-            randomizer)
-        {
         }
     }
 }
